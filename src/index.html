@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini LOGO Language</title>
+    <link rel="stylesheet" href="/src/css/style.css">
+</head>
+<body>
+    <!-- Draw and editing area --> 
+    <div class="draw-area-container">
+        <div class="draw-area">
+            <canvas id="canvas"></canvas>
+        </div>
+        <div class="editor-area">
+            <div class="code-container">
+                <input type="text">
+            </div>
+            <div class="controls">
+                <button class="run-btn">Run</button>
+            </div>
+        </div>
+    </div>
+    <script src="/src/js/parser.js"></script>
+    <script src="/src/js/interpreter.js"></script>
+    <script src="/src/js/script.js"></script>
+</body>
+</html>
