@@ -1,7 +1,7 @@
 html, body {
     margin: 0;
     padding: 0;
-    background-color: #202225;
+    background-color: #343541;
     font-family: sans-serif;
     box-sizing: border-box;
     width: 100%;
@@ -25,7 +25,6 @@ html, body {
 .editor-area {
     padding-top: 40px;
     padding-bottom: 40px;
-    background-color: #1b1b1d;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -39,14 +38,26 @@ html, body {
     background-color: transparent;
     border: none;
     font-size: 16px;
-    padding-right: 20px;
-    padding-bottom: 3px;
+    padding-right: 15px;
+    padding-top: 6px;
     color: white;
+    font-weight: 100;
+}
+
+.run-btn {
+    background-color: transparent;
+    color:#7c7c7c;
+    border: none;
+    cursor: pointer;
+    border-radius: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 .code-container {
     display: flex;
-    background-color: #35383b;
+    background-color: #7c7c7c;
+    box-shadow: 1px 0px 44px -12px rgba(0,0,0,0.75);
     border-radius: 10px;
     width: 60%;
     height: 50px;
