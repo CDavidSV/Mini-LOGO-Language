@@ -42,6 +42,7 @@ class Robot {
         this.penUp = true;
         this.img = new Image();
         this.img.src = '../assets/icons/robot.png';
+
     }
 
     move(units) {
@@ -67,11 +68,11 @@ class Robot {
     }
 
     rotateRight(angle){
-        this.setAngle(-angle);
+        this.setAngle(angle);
     }
 
     rotateLeft(angle){
-        this.setAngle(angle);
+        this.setAngle(-angle);
     }
 
     pickupPen() {
@@ -102,6 +103,7 @@ class Robot {
 
     drawLine() {
         ctx.strokeStyle = this.penColor;
+        ctx.beginPath();
         ctx.lineWidth = 2;
         ctx.moveTo(this.prevPosX, this.prevPosY);
         ctx.lineTo(this.posX, this.posY);
@@ -117,6 +119,7 @@ function clearScreen() {
     ctx.fillStyle = mainCanvasColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.globalCompositeOperation = "lighter";
+    robot.drawRobot();
 }
 
 // Resizes the canvas when user resizes their browser window.
