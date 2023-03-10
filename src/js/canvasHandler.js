@@ -4,93 +4,108 @@ const ctx = canvas.getContext('2d');
 const canvasContainer = document.querySelector('.draw-area');
 
 // Variables
-const interval = 1000 / 60;
-let then = Date.now();
-let now;
-let delta;
-const mainCanvasColor = '#0F0F0F';
-const penColors = ["red", "blue", "green", "yellow", "orange", "purple", "black", "white", "gray", "brown", "pink", "turquoise", "lavender", "teal", "maroon", "navy", "olive", "coral", "beige", "gold"];
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-ctx.fillStyle = mainCanvasColor;
+const mainCanvasColor = '#343541';
 
 // Events
 window.addEventListener('resize', resizeCanvas);
 
 class Robot {
-    constructor(canvas, x= 0, y=0,direction) {
-        this.canvas =canvas;
-        this.ctx = canvas.getContext("2d")
-        this.x = x
-        this.y = y
-        this.PenDown = true
-        this.direction = direction
-        this.angle = 0
-    }
+    width = 30;
+    height = 30;
+    penColors = {
+        "rojo": "#FF0000",
+        "azul": "#0000FF",
+        "verde": "#00FF00",
+        "amarillo": "#FFFF00",
+        "naranja": "#FFA500",
+        "morado": "#800080",
+        "negro": "#000000",
+        "blanco": "#FFFFFF",
+        "gris": "#808080",
+        "marrón": "#A52A2A",
+        "rosa": "#FFC0CB",
+        "turquesa": "#40E0D0",
+        "lavanda": "#E6E6FA",
+        "granate": "#800000",
+        "oliva": "#808000",
+        "coral": "#FF7F50",
+        "beige": "#F5F5DC",
+    };
 
-    update() {
-
+    constructor() {
+        this.prevPosX = canvas.width / 2;
+        this.prevPosY = canvas.height / 2;
+        this.posX = canvas.width / 2;
+        this.posY = canvas.height / 2;
+        this.angle = 90;
+        this.penColor = "#FFFFFF";
+        this.penUp = true;
+        this.img = new Image();
+        this.img.src = '../assets/icons/robot.png';
     }
 
     move(units) {
-        const angle = (this.direction * Math.PI) / 180; // Convertir el ángulo a radianes
-        const newX = this.x + units * Math.cos(angle); // Calcular la nueva posición x
-        const newY = this.y + units * Math.sin(angle); // Calcular la nueva posición y
-    
-        // Verificar que la nueva posición esté dentro del área de dibujo
-        if (newX >= 0 && newX <= this.canvas.width && newY >= 0 && newY <= this.canvas.height) {
-          if (this.penDown) {
-            // Dibujar la línea
-            this.ctx.beginPath();
-            this.ctx.moveTo(this.x, this.y);
-            this.ctx.lineTo(newX, newY);
-            this.ctx.stroke();
-          }
-    
-          // Actualizar la posición del robot
-          this.x = newX;
-          this.y = newY;
+        const radians = this.angle * (Math.PI / 180);
+        const newX = this.posX - units * Math.cos(radians); // Calculate new x position
+        const newY = this.posY - units * Math.sin(radians); // Calculate new y position
+        this.prevPosX = this.posX;
+        this.prevPosY = this.posY;
+        this.posX = newX;
+        this.posY = newY;
+
+        this.drawRobot();
+        if (this.penUp) {
+            this.drawLine();
         }
-      }
-    move_forward(units){
-        move(units)
-    }
-    move_backwards(units){
-        move(-units)
     }
 
-    rotate(angle) {
-        const radianes = angle * (Math.PI/180)
-        ctx.translate(this.x,this.y)
-        ctx.rotate(radianes)
-        ctx.translate(-this.x, -this.y)
-        this.angle +=angle
+    setAngle(angle) {
+        const addedAngles = this.angle + angle
+        const k = Math.floor((addedAngles) / 360);
 
-    }
-    rotate_right(angle){
-        this.rotate(angle)
+        this.angle = addedAngles - (360 * k);
     }
 
-    rotate_left(angle){
-        this.rotate(-angle)
+    rotateRight(angle){
+        this.setAngle(-angle);
     }
 
+    rotateLeft(angle){
+        this.setAngle(angle);
+    }
 
     pickupPen() {
-        this.PenDown = false
+        this.penUp = true;
     }
 
     dropPen(){
-        this.PenDown = true
+        this.penUp = false;
     }
     
     changeColor(color) {
-
+        if (!this.penColors.hasOwnProperty(color)) return;
+        this.penColor = this.penColors[color];
     }
 
     center() {
+        this.posX = (canvas.width / 2);
+        this.posY = (canvas.height / 2);
+    }
 
+    drawRobot() {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = mainCanvasColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.globalCompositeOperation = "lighter";
+        ctx.drawImage(this.img, this.posX - (this.width / 2), this.posY - (this.height / 2), this.width, this.height);
+    }
+
+    drawLine() {
+        ctx.strokeStyle = this.penColor;
+        ctx.lineWidth = 2;
+        ctx.moveTo(this.prevPosX, this.prevPosY);
+        ctx.lineTo(this.posX, this.posY);
+        ctx.stroke();
     }
 }
 
@@ -98,20 +113,10 @@ class Robot {
 
 // Clears the canvas.
 function clearScreen() {
-    context.globalCompositeOperation = 'source-over';
-    context.fillStyle = mainCanvasColor;
-    context.fillRect(0, 0, canvas.width, canvas.height);
-    context.globalCompositeOperation = "lighter";
-}
-
-// Main animate function.
-function animate() {
-    // Update the rockets position over time.
-    requestAnimationFrame(animate);
-
-    now = Date.now();
-    delta = now - then
-    if (!(delta > interval)) return;
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = mainCanvasColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = "lighter";
 }
 
 // Resizes the canvas when user resizes their browser window.
@@ -120,4 +125,11 @@ function resizeCanvas() {
     canvas.height = window.innerHeight;
 }
 
-animate();
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+ctx.fillStyle = mainCanvasColor;
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+const robot = new Robot();
+robot.img.onload = () => {
+    robot.drawRobot();
+};

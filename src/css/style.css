@@ -19,7 +19,6 @@ html, body {
 
 .draw-area {
     position: absolute;
-    z-index: -1;
 }
 
 .editor-area {
@@ -31,6 +30,7 @@ html, body {
     justify-content: center;
     gap: 15px;
     width: 100%;
+    z-index: 2;
 }
 
 .clear {
