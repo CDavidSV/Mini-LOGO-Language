@@ -2,6 +2,7 @@
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
 const canvasContainer = document.querySelector('.draw-area');
+const robotElement = document.querySelector('#robot');
 
 // Variables
 const mainCanvasColor = '#343541';
@@ -12,6 +13,7 @@ window.addEventListener('resize', resizeCanvas);
 class Robot {
     width = 30;
     height = 30;
+    paths = [];
     penColors = {
         "rojo": "#FF0000",
         "azul": "#0000FF",
@@ -32,7 +34,7 @@ class Robot {
         "beige": "#F5F5DC",
     };
 
-    constructor() {
+    constructor(robotElement) {
         this.prevPosX = canvas.width / 2;
         this.prevPosY = canvas.height / 2;
         this.posX = canvas.width / 2;
@@ -40,24 +42,29 @@ class Robot {
         this.angle = 90;
         this.penColor = "#FFFFFF";
         this.penUp = true;
-        this.img = new Image();
-        this.img.src = '../assets/icons/robot.png';
-
+        this.robot = robotElement;
     }
 
     move(units) {
         const radians = this.angle * (Math.PI / 180);
         const newX = this.posX - units * Math.cos(radians); // Calculate new x position
         const newY = this.posY - units * Math.sin(radians); // Calculate new y position
+
         this.prevPosX = this.posX;
         this.prevPosY = this.posY;
         this.posX = newX;
         this.posY = newY;
 
-        this.drawRobot();
+        // Save the path into paths array
+        this.paths.push({prevX: this.prevPosX, prevY: this.prevPosY, currentX: this.posX, currentY: this.posY, currentColor: this.penColor});
+
+        this.robot.style.left =`${this.posX}px`;
+        this.robot.style.top =`${this.posY}px`;
+
         if (this.penUp) {
             this.drawLine();
         }
+
     }
 
     setAngle(angle) {
@@ -65,6 +72,7 @@ class Robot {
         const k = Math.floor((addedAngles) / 360);
 
         this.angle = addedAngles - (360 * k);
+        this.robot.style.transform = `translate(-50%, -50%) rotate(${this.angle - 90}deg)`;
     }
 
     rotateRight(angle){
@@ -79,7 +87,7 @@ class Robot {
         this.penUp = true;
     }
 
-    dropPen(){
+    dropPen() {
         this.penUp = false;
     }
     
@@ -91,14 +99,8 @@ class Robot {
     center() {
         this.posX = (canvas.width / 2);
         this.posY = (canvas.height / 2);
-    }
-
-    drawRobot() {
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.fillStyle = mainCanvasColor;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.globalCompositeOperation = "lighter";
-        ctx.drawImage(this.img, this.posX - (this.width / 2), this.posY - (this.height / 2), this.width, this.height);
+        this.robot.style.left =`${this.posX}px`;
+        this.robot.style.top =`${this.posY}px`;
     }
 
     drawLine() {
@@ -108,6 +110,24 @@ class Robot {
         ctx.moveTo(this.prevPosX, this.prevPosY);
         ctx.lineTo(this.posX, this.posY);
         ctx.stroke();
+    }
+
+    reconstructPath() {
+        // Clear canvas
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = mainCanvasColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.globalCompositeOperation = "lighter";
+
+        // Redraw all paths
+        for(let path of this.paths) {
+            ctx.strokeStyle = path.currentColor;
+            ctx.beginPath();
+            ctx.lineWidth = 2;
+            ctx.moveTo(path.prevX, path.prevY);
+            ctx.lineTo(path.currentX, path.currentY);
+            ctx.stroke();
+        }
     }
 }
 
@@ -119,20 +139,17 @@ function clearScreen() {
     ctx.fillStyle = mainCanvasColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.globalCompositeOperation = "lighter";
-    robot.drawRobot();
 }
 
 // Resizes the canvas when user resizes their browser window.
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    robot.reconstructPath();
 }
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 ctx.fillStyle = mainCanvasColor;
 ctx.fillRect(0, 0, canvas.width, canvas.height);
-const robot = new Robot();
-robot.img.onload = () => {
-    robot.drawRobot();
-};
+const robot = new Robot(robotElement);

@@ -6,6 +6,7 @@ html, body {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 } 
 
 .draw-area-container {
@@ -19,6 +20,8 @@ html, body {
 
 .draw-area {
     position: absolute;
+    width: 100%;
+    height: 100%;
 }
 
 .editor-area {
@@ -49,6 +52,7 @@ html, body {
     color:#9ca2ff;
     border: none;
     cursor: pointer;
+    box-shadow: 1px 0px 44px -12px rgba(0,0,0,0.75);
     border-radius: 100%;
     padding: 0;
     margin: 0;
@@ -75,4 +79,11 @@ html, body {
 
 .code-input:focus {
     outline: none;
+}
+
+#robot {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
