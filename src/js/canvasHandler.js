@@ -161,8 +161,8 @@ function debouncedResize() {
     timeoutId = setTimeout(resizeCanvas, 500);
 }
 
-canvasContainer.offsetWidth = window.innerWidth;
-canvasContainer.offsetHeight = window.innerHeight;
+canvas.width = canvasContainer.offsetWidth;
+canvas.height = canvasContainer.offsetHeight;
 ctx.fillStyle = mainCanvasColor;
 ctx.fillRect(0, 0, canvasContainer.offsetWidth, canvasContainer.offsetHeight);
 const robot = new Robot(robotElement);
