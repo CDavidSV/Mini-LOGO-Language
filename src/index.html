@@ -9,26 +9,35 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
-    <!-- Draw and editing area -->
-    <div class="container">
-        <div class="draw-area-container">
-            <div class="draw-area">
-                <canvas id="canvas"></canvas>
-                <img id="robot" src="../assets/icons/robot.png" width="30" height="30" alt="">
-            </div>
-            <div class="editor-area">
-                <div class="code-container">
-                    <input class="code-input" type="text">
-                    <button class="clear"><span class="material-icons">close</span></button>
+    <!-- Main Content wrapper -->
+    <div class="wrapper">
+        <!-- Menu -->
+        <div class="menu">
+            <h1>Instrucciones</h1>
+        </div>
+        <!-- Draw and editing area -->
+        <div class="container">
+            <div class="draw-area-container">
+                <div class="draw-area">
+                    <canvas id="canvas"></canvas>
+                    <img id="robot" src="../assets/icons/robot.png" width="30" height="30" alt="">
                 </div>
-                <div class="controls">
-                    <button class="run-btn"><span style="font-size: 50px;" class="material-icons">arrow_circle_right</span></button>
+                <div class="editor-area">
+                    <p class="error-msg"></p>
+                    <div class="editor">
+                        <div class="code-container">
+                            <input class="code-input" type="text">
+                            <button class="clear"><span class="material-icons">close</span></button>
+                        </div>
+                        <div class="controls">
+                            <button class="run-btn"><span style="font-size: 50px;" class="material-icons">arrow_circle_right</span></button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <script src="/src/js/canvasHandler.js"></script>
-    <script src="/src/js/parser.js"></script>
     <script src="/src/js/interpreter.js"></script>
     <script src="/src/js/script.js"></script>
 </body>

@@ -35,17 +35,17 @@ class Robot {
     };
 
     constructor(robotElement) {
-        this.prevPosX = canvas.width / 2;
-        this.prevPosY = canvas.height / 2;
-        this.posX = canvas.width / 2;
-        this.posY = canvas.height / 2;
+        this.prevPosX = canvasContainer.offsetWidth / 2;
+        this.prevPosY = canvasContainer.offsetHeight / 2;
+        this.posX = canvasContainer.offsetWidth / 2;
+        this.posY = canvasContainer.offsetHeight / 2;
         this.angle = 90;
         this.penColor = "#FFFFFF";
         this.penUp = true;
         this.robot = robotElement;
     }
 
-    move(units, storePath = true) {
+    moveTo(units, storePath = true) {
         const radians = this.angle * (Math.PI / 180);
         const newX = this.posX - units * Math.cos(radians); // Calculate new x position
         const newY = this.posY - units * Math.sin(radians); // Calculate new y position
@@ -57,7 +57,7 @@ class Robot {
 
         // Save the path into paths array.
         if (storePath) {
-            this.paths.push({length: units, angle: this.angle, currentColor: this.penColor});
+            this.paths.push({length: units, angle: this.angle, currentColor: this.penColor, penUp: this.penUp});
         }
 
         this.robot.style.left =`${this.posX}px`;
@@ -68,20 +68,12 @@ class Robot {
         }
     }
 
-    setAngle(angle) {
+    addAngle(angle) {
         const addedAngles = this.angle + angle
         const k = Math.floor((addedAngles) / 360);
 
         this.angle = addedAngles - (360 * k);
         this.robot.style.transform = `translate(-50%, -50%) rotate(${this.angle - 90}deg)`;
-    }
-
-    rotateRight(angle){
-        this.setAngle(angle);
-    }
-
-    rotateLeft(angle){
-        this.setAngle(-angle);
     }
 
     pickupPen() {
@@ -98,8 +90,8 @@ class Robot {
     }
 
     center() {
-        this.posX = (canvas.width / 2);
-        this.posY = (canvas.height / 2);
+        this.posX = (canvasContainer.offsetWidth / 2);
+        this.posY = (canvasContainer.offsetHeight / 2);
         this.robot.style.left =`${this.posX}px`;
         this.robot.style.top =`${this.posY}px`;
     }
@@ -113,28 +105,30 @@ class Robot {
         ctx.stroke();
     }
 
+    // This function will be called when the screen is resized
     reconstructPath() {
         if (this.paths.length < 1) return;
 
         // Clear canvas
         ctx.globalCompositeOperation = 'source-over';
         ctx.fillStyle = mainCanvasColor;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, canvasContainer.offsetWidth, canvasContainer.offsetHeight);
         ctx.globalCompositeOperation = "lighter";
 
         // Reset robot's position and angle
-        this.prevPosX = canvas.width / 2;
-        this.prevPosY = canvas.height / 2;
-        this.posX = canvas.width / 2;
-        this.posY = canvas.height / 2;
+        this.prevPosX = canvasContainer.offsetWidth / 2;
+        this.prevPosY = canvasContainer.offsetHeight / 2;
+        this.posX = canvasContainer.offsetWidth / 2;
+        this.posY = canvasContainer.offsetHeight / 2;
         this.angle = 90;
 
         // Redraw all paths
         for(let path of this.paths) {
-            ctx.strokeStyle = path.currentColor;
+            this.penColor = path.currentColor;
             this.angle = path.angle;
+            this.penUp = path.penUp;
 
-            this.move(path.length, false);
+            this.moveTo(path.length, false);
         }
     }
 }
@@ -145,15 +139,15 @@ class Robot {
 function clearScreen() {
     ctx.globalCompositeOperation = 'source-over';
     ctx.fillStyle = mainCanvasColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, canvasContainer.offsetWidth, canvasContainer.offsetHeight);
     ctx.globalCompositeOperation = "lighter";
     robot.paths = [];
 }
 
 // Resizes the canvas when user resizes their browser window.
 function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = canvasContainer.offsetWidth;
+    canvas.height = canvasContainer.offsetHeight;
     robot.reconstructPath();
 
     if (robot.paths.length < 1) {
@@ -167,8 +161,8 @@ function debouncedResize() {
     timeoutId = setTimeout(resizeCanvas, 500);
 }
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvasContainer.offsetWidth = window.innerWidth;
+canvasContainer.offsetHeight = window.innerHeight;
 ctx.fillStyle = mainCanvasColor;
-ctx.fillRect(0, 0, canvas.width, canvas.height);
+ctx.fillRect(0, 0, canvasContainer.offsetWidth, canvasContainer.offsetHeight);
 const robot = new Robot(robotElement);

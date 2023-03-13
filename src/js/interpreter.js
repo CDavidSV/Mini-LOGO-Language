@@ -1,0 +1,5 @@
+class RobotLogoInterpreter {
+    constructor() {
+
+    }
+}

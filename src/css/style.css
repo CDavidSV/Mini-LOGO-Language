@@ -6,19 +6,42 @@ html, body {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    overflow: hidden;
 } 
 
-.container {
-    display: flex;
-    flex-grow: 0;
-    width: 100%;
+.wrapper {
+    display: grid;
+    grid-template-columns: 300px 1fr;
     height: 100%;
+    overflow: hidden;
 }
 
 .menu {
     background-color: #202123;
-    flex-basis: 800px;
+    color: white;
+    padding: 15px;
+}
+
+.container {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu li {
+    padding: 10px;
+}
+
+.menu li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .draw-area-container {
@@ -28,6 +51,7 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
+    position: relative;
 }
 
 .draw-area {
@@ -40,12 +64,18 @@ html, body {
     padding-top: 40px;
     padding-bottom: 40px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 15px;
     width: 100%;
     z-index: 2;
+}
+
+.editor {
+    width: 100%;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
 }
 
 .clear {
@@ -91,6 +121,12 @@ html, body {
 
 .code-input:focus {
     outline: none;
+}
+
+.error-msg {
+    color: #ff0000;
+    text-align: center;
+    font-size: medium;
 }
 
 #robot {
