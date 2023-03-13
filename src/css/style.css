@@ -9,6 +9,18 @@ html, body {
     overflow: hidden;
 } 
 
+.container {
+    display: flex;
+    flex-grow: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.menu {
+    background-color: #202123;
+    flex-basis: 800px;
+}
+
 .draw-area-container {
     height: 100%;
     width: 100%;

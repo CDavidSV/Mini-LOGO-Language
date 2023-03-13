@@ -45,7 +45,7 @@ class Robot {
         this.robot = robotElement;
     }
 
-    move(units) {
+    move(units, storePath = true) {
         const radians = this.angle * (Math.PI / 180);
         const newX = this.posX - units * Math.cos(radians); // Calculate new x position
         const newY = this.posY - units * Math.sin(radians); // Calculate new y position
@@ -55,8 +55,10 @@ class Robot {
         this.posX = newX;
         this.posY = newY;
 
-        // Save the path into paths array
-        this.paths.push({prevX: this.prevPosX, prevY: this.prevPosY, currentX: this.posX, currentY: this.posY, currentColor: this.penColor});
+        // Save the path into paths array.
+        if (storePath) {
+            this.paths.push({length: units, angle: this.angle, currentColor: this.penColor});
+        }
 
         this.robot.style.left =`${this.posX}px`;
         this.robot.style.top =`${this.posY}px`;
@@ -64,7 +66,6 @@ class Robot {
         if (this.penUp) {
             this.drawLine();
         }
-
     }
 
     setAngle(angle) {
@@ -113,20 +114,27 @@ class Robot {
     }
 
     reconstructPath() {
+        if (this.paths.length < 1) return;
+
         // Clear canvas
         ctx.globalCompositeOperation = 'source-over';
         ctx.fillStyle = mainCanvasColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.globalCompositeOperation = "lighter";
 
+        // Reset robot's position and angle
+        this.prevPosX = canvas.width / 2;
+        this.prevPosY = canvas.height / 2;
+        this.posX = canvas.width / 2;
+        this.posY = canvas.height / 2;
+        this.angle = 90;
+
         // Redraw all paths
         for(let path of this.paths) {
             ctx.strokeStyle = path.currentColor;
-            ctx.beginPath();
-            ctx.lineWidth = 2;
-            ctx.moveTo(path.prevX, path.prevY);
-            ctx.lineTo(path.currentX, path.currentY);
-            ctx.stroke();
+            this.angle = path.angle;
+
+            this.move(path.length, false);
         }
     }
 }
@@ -139,6 +147,7 @@ function clearScreen() {
     ctx.fillStyle = mainCanvasColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.globalCompositeOperation = "lighter";
+    robot.paths = [];
 }
 
 // Resizes the canvas when user resizes their browser window.
@@ -146,6 +155,16 @@ function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     robot.reconstructPath();
+
+    if (robot.paths.length < 1) {
+        robot.center();
+    }
+}
+
+// Debounce the resize event
+function debouncedResize() {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(resizeCanvas, 500);
 }
 
 canvas.width = window.innerWidth;
