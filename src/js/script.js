@@ -36,7 +36,6 @@ function runInterpreter() {
     if (interpreterObj.result.status === 'Error') {
         error.innerHTML = `${interpreterObj.result.status}: ${interpreterObj.result.desc}`;
     } else {
-        console.log(interpreterObj.commands)
         robot.executeCommands(interpreterObj.commands);
         clearEditor();
     }
