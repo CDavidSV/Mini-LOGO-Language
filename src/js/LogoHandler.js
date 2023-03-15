@@ -11,8 +11,6 @@ const mainCanvasColor = '#343541';
 window.addEventListener('resize', resizeCanvas);
 
 class Robot {
-    width = 30;
-    height = 30;
     paths = [];
     penColors = {
         "rojo": "#FF0000",
@@ -24,7 +22,7 @@ class Robot {
         "negro": "#000000",
         "blanco": "#FFFFFF",
         "gris": "#808080",
-        "marrón": "#A52A2A",
+        "marron": "#A52A2A",
         "rosa": "#FFC0CB",
         "turquesa": "#40E0D0",
         "lavanda": "#E6E6FA",
@@ -43,6 +41,24 @@ class Robot {
         this.penColor = "#FFFFFF";
         this.penUp = true;
         this.robot = robotElement;
+
+        this.commands = {
+            "adelante": (distancia) => this.moveTo(distancia),
+            "ade": (distancia) => this.moveTo(distancia),
+            "atras": (distancia) => this.moveTo(-distancia),
+            "atr": (distancia) => this.moveTo(-distancia),
+            "derecha": (angle) => this.addAngle(angle),
+            "der": (angle) => this.addAngle(angle),
+            "izquierda": (angle) => this.addAngle(-angle),
+            "izq": (angle) => this.addAngle(-angle),
+            "levantar_pluma": () => this.pickupPen(),
+            "lp": () => this.pickupPen(),
+            "bajar_pluma": () => this.dropPen(),
+            "bp": () => this.dropPen(),
+            "centrar": () => this.center(),
+            "limpiar": () => clearScreen(),
+            "color": (color) => this.changeColor(color) ,
+        };
     }
 
     moveTo(units, storePath = true) {
@@ -69,11 +85,15 @@ class Robot {
     }
 
     addAngle(angle) {
-        const addedAngles = this.angle + angle
+        const addedAngles = this.angle + parseInt(angle);
         const k = Math.floor((addedAngles) / 360);
 
         this.angle = addedAngles - (360 * k);
         this.robot.style.transform = `translate(-50%, -50%) rotate(${this.angle - 90}deg)`;
+    }
+
+    repeat() {
+
     }
 
     pickupPen() {
@@ -94,6 +114,7 @@ class Robot {
         this.posY = (canvasContainer.offsetHeight / 2);
         this.robot.style.left =`${this.posX}px`;
         this.robot.style.top =`${this.posY}px`;
+        this.angle = 90;
     }
 
     drawLine() {
@@ -103,6 +124,18 @@ class Robot {
         ctx.moveTo(this.prevPosX, this.prevPosY);
         ctx.lineTo(this.posX, this.posY);
         ctx.stroke();
+    }
+
+    executeCommands(instructions) {
+        for (let instruction of instructions) {
+            if (instruction.type === "command") {
+                this.commands[instruction.body](instruction.value);
+            } else if (instruction.type === "loop") {
+                for (let i = 0; i < instruction.value; i++) {
+                    this.executeCommands(instruction.body);
+                }
+            }
+        }
     }
 
     // This function will be called when the screen is resized
@@ -153,12 +186,6 @@ function resizeCanvas() {
     if (robot.paths.length < 1) {
         robot.center();
     }
-}
-
-// Debounce the resize event
-function debouncedResize() {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(resizeCanvas, 500);
 }
 
 canvas.width = canvasContainer.offsetWidth;
