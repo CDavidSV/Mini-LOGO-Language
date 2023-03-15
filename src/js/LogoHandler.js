@@ -11,7 +11,7 @@ const mainCanvasColor = '#343541';
 window.addEventListener('resize', resizeCanvas);
 
 class Robot {
-    paths = [];
+    instructions = [];
     penColors = {
         "rojo": "#FF0000",
         "azul": "#0000FF",
@@ -56,12 +56,13 @@ class Robot {
             "bajar_pluma": () => this.dropPen(),
             "bp": () => this.dropPen(),
             "centrar": () => this.center(),
+            "ctr": () => this.center(),
             "limpiar": () => clearScreen(),
             "color": (color) => this.changeColor(color) ,
         };
     }
 
-    moveTo(units, storePath = true) {
+    moveTo(units) {
         const radians = this.angle * (Math.PI / 180);
         const newX = this.posX - units * Math.cos(radians); // Calculate new x position
         const newY = this.posY - units * Math.sin(radians); // Calculate new y position
@@ -70,11 +71,6 @@ class Robot {
         this.prevPosY = this.posY;
         this.posX = newX;
         this.posY = newY;
-
-        // Save the path into paths array.
-        if (storePath) {
-            this.paths.push({length: units, angle: this.angle, currentColor: this.penColor, penUp: this.penUp});
-        }
 
         this.robot.style.left =`${this.posX}px`;
         this.robot.style.top =`${this.posY}px`;
@@ -115,6 +111,7 @@ class Robot {
         this.robot.style.left =`${this.posX}px`;
         this.robot.style.top =`${this.posY}px`;
         this.angle = 90;
+        this.addAngle(0);
     }
 
     drawLine() {
@@ -126,7 +123,12 @@ class Robot {
         ctx.stroke();
     }
 
-    executeCommands(instructions) {
+    setInstrunctions(newInstructions) {
+        newInstructions.forEach(i => this.instructions.push(i));
+        this.executeCommands(newInstructions);
+    }
+
+    executeCommands(instructions=this.instructions) {
         for (let instruction of instructions) {
             if (instruction.type === "command") {
                 this.commands[instruction.body](instruction.value);
@@ -181,9 +183,11 @@ function clearScreen() {
 function resizeCanvas() {
     canvas.width = canvasContainer.offsetWidth;
     canvas.height = canvasContainer.offsetHeight;
-    robot.reconstructPath();
+    clearScreen();
+    robot.center();
+    robot.executeCommands();
 
-    if (robot.paths.length < 1) {
+    if (robot.instructions.length < 1) {
         robot.center();
     }
 }

@@ -36,7 +36,7 @@ function runInterpreter() {
     if (interpreterObj.result.status === 'Error') {
         error.innerHTML = `${interpreterObj.result.status}: ${interpreterObj.result.desc}`;
     } else {
-        robot.executeCommands(interpreterObj.commands);
+        robot.setInstrunctions(interpreterObj.commands);
         clearEditor();
     }
 }
