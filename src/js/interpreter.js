@@ -37,7 +37,7 @@ class Interpreter {
             this.token = this.nextToken();
             this.command();
         } else if (this.token && this.loops < 1) {
-            this.result = {status: "Error", desc: `Comando no reconocido: ${this.token}`};
+            this.result = {status: "Error", desc: `Comando no reconocido (${this.token})`};
             return;
         } else {
             this.result = {status: "Success", desc: "Todos los comandos se han analizado con éxito"};

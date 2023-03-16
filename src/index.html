@@ -14,6 +14,44 @@
         <!-- Menu -->
         <div class="menu">
             <h1>Instrucciones</h1>
+            <div class="commands-container">
+                <div class="command" id="1" onclick="tryCommand(event)">
+                    <p class="command-title">adelante / ade</p>
+                    <p class="command-text">Ejemplo: <strong>adelante 50</strong> movera el robot 50 pasos hacia el frente.</p>
+                </div>
+                <div class="command" id="2" onclick="tryCommand(event)">
+                    <p class="command-title">atras / atr</p>
+                    <p class="command-text">Ejemplo: <strong>atras 50</strong> movera el robot 50 pasos hacia atrás.</p>
+                </div>
+                <div class="command" id="3" onclick="tryCommand(event)">
+                    <p class="command-title">derecha / der</p>
+                    <p class="command-text">Ejemplo: <strong>derecha 45</strong> girará el robot 45 grados a la derecha.</p>
+                </div>
+                <div class="command" id="4" onclick="tryCommand(event)">
+                    <p class="command-title">izquierda / izq</p>
+                    <p class="command-text">Ejemplo: <strong>izquierda 45</strong> girará el robot 45 grados a la derecha.</p>
+                </div>
+                <div class="command" id="5" onclick="tryCommand(event)">
+                    <p class="command-title">color</p>
+                    <p class="command-text">Ejemplo: <strong>color azul</strong> cambia el color de las lineas a a.zul</p>
+                </div>
+                <div class="command" id="6" onclick="tryCommand(event)">
+                    <p class="command-title">levantar_pluma / lp</p>
+                    <p class="command-text">Ejemplo: <strong>levantar_pluma</strong> El robot traza una linea cuando se mueve.</p>
+                </div>
+                <div class="command" id="7" onclick="tryCommand(event)">
+                    <p class="command-title">bajar_pluma / bp</p>
+                    <p class="command-text">Ejemplo: <strong>bajar_pluma</strong> El robot puede moverse sin trazar una línea.</p>
+                </div>
+                <div class="command" id="8" onclick="tryCommand(event)">
+                    <p class="command-title">centrar / ctr</p>
+                    <p class="command-text">Ejemplo: <strong>centrar</strong> coloca el robot en el centro de la pantalla.</p>
+                </div>
+                <div class="command" id="9" onclick="tryCommand(event)">
+                    <p class="command-title">limpiar</p>
+                    <p class="command-text">Ejemplo: <strong>limpiar</strong> remueve todos los trazos por el robot.</p>
+                </div>
+            </div>
         </div>
         <!-- Draw and editing area -->
         <div class="container">
