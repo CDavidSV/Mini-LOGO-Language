@@ -9,11 +9,20 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
+    <!-- Page header -->
+    <div class="header">
+        <button id="menu-btn" class="hamburger"><span class="material-icons">menu</span></button>
+    </div>
     <!-- Main Content wrapper -->
     <div class="wrapper">
         <!-- Menu -->
         <div class="menu">
-            <h1>Instrucciones</h1>
+            <div style="width: 100%; display: flex; justify-content: flex-end;">
+                <button id="menu-btn" class="close-menu"><span class="material-icons">close</span></button>
+            </div>
+            <div class="menu-header">
+                <h1>Instrucciones</h1>
+            </div>
             <div class="commands-container">
                 <div class="command" id="1" onclick="tryCommand(event)">
                     <p class="command-title">adelante / ade</p>
@@ -54,22 +63,20 @@
             </div>
         </div>
         <!-- Draw and editing area -->
-        <div class="container">
-            <div class="draw-area-container">
-                <div class="draw-area">
-                    <canvas id="canvas"></canvas>
-                    <img id="robot" src="../assets/icons/robot.png" width="30" height="30" alt="">
-                </div>
-                <div class="editor-area">
-                    <p class="error-msg"></p>
-                    <div class="editor">
-                        <div class="code-container">
-                            <input class="code-input" type="text">
-                            <button class="clear"><span class="material-icons">close</span></button>
-                        </div>
-                        <div class="controls">
-                            <button class="run-btn"><span style="font-size: 50px;" class="material-icons">arrow_circle_right</span></button>
-                        </div>
+        <div class="draw-area-container">
+            <div class="draw-area">
+                <canvas id="canvas"></canvas>
+                <img id="robot" src="../assets/icons/robot.png" width="30" height="30" alt="">
+            </div>
+            <div class="editor-area">
+                <p class="error-msg"></p>
+                <div class="editor">
+                    <div class="code-container">
+                        <input class="code-input" type="text">
+                        <button class="clear"><span class="material-icons">close</span></button>
+                    </div>
+                    <div class="controls">
+                        <button class="run-btn"><span style="font-size: 50px;" class="material-icons">arrow_circle_right</span></button>
                     </div>
                 </div>
             </div>

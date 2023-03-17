@@ -5,7 +5,7 @@ class Interpreter {
         this.token = "";
         this.previousTokenIndex = -1;
         this.tokenIndex = 0;
-        this.result = {status: 'Waiting', des: 'Waiting for Input string'};
+        this.result = {status: 'Waiting', desc: 'Waiting for Input string'};
         this.loops = 0;
     }
 
@@ -56,7 +56,7 @@ class Interpreter {
 
     number() {
         if (this.token && !this.token.match(/^\d+$/)) {
-            this.result = {status: "Error", desc: `${this.token} no es un valor valido para este comando`};
+            this.result = {status: "Error", desc: `${this.token} no es un valor valido para este comando (${this.tokens[this.previousTokenIndex]})`};
             return;
         } else if (!this.token) {
             this.result = {status: "Error", desc: `Este comando requiere un valor (${this.tokens[this.previousTokenIndex]})`};
