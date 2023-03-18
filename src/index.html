@@ -60,6 +60,10 @@
                     <p class="command-title">limpiar</p>
                     <p class="command-text">Ejemplo: <strong>limpiar</strong> remueve todos los trazos por el robot.</p>
                 </div>
+                <div class="command" id="10" onclick="tryCommand(event)">
+                    <p class="command-title">repetir</p>
+                    <p class="command-text">Ejemplo: <strong>repetir 100 [adelante 200 derecha 89]</strong> hará un círculo genial</p>
+                </div>
             </div>
         </div>
         <!-- Draw and editing area -->
@@ -83,7 +87,7 @@
         </div>
     </div>
     <script src="/src/js/LogoHandler.js"></script>
-    <script src="/src/js/Interpreter.js"></script>
+    <script src="/src/js/Parser.js"></script>
     <script src="/src/js/script.js"></script>
 </body>
 </html>

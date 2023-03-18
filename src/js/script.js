@@ -17,30 +17,41 @@ const commands = {
     7: 'bajar_pluma',
     8: 'centrar',
     9: 'limpiar',
+    10: 'repetir 100 [adelante 200 derecha 89]'
 }
 const enteredCommands = [];
+let commandIndex = 0;
 let menuOpen = false;
 
 // Events
 clear.addEventListener('click', clearEditor);
-run.addEventListener('click', runInterpreter);
+run.addEventListener('click', runParser);
 menuBtn.forEach(btn => btn.addEventListener('click', handleMenu));
 codeInput.addEventListener('keyup', (e) => {
+    handleyKeyInputs(e);
+});
+
+// Functions
+
+function handleyKeyInputs(e) {
     e.preventDefault();
     switch (e.keyCode) {
         case 13:
             run.click();
             break;
         case 38:
-            console.log(1);
+            if (enteredCommands.length < 1) return;                
+            if (commandIndex !== 0) commandIndex--;
+            codeInput.value = enteredCommands[commandIndex];
             break;
         case 40:
-            console.log(2);
+            if (enteredCommands.length < 1) return;        
+            if (commandIndex < enteredCommands.length - 1) commandIndex++;
+            codeInput.value = enteredCommands[commandIndex];
             break;
     }
-});
+}
 
-// Functions
 function handleMenu() {
     if (!menuOpen) {
         menu.classList.add('active');
@@ -58,23 +69,27 @@ function clearEditor() {
 
 function tryCommand(event) {
     codeInput.value = commands[event.target.closest('.command').id];
+  
+    handleMenu();
 }
 
-function runInterpreter() {
+function runParser() {
+    commandIndex = enteredCommands.length;
     if (codeInput.value.length < 1) {
         error.innerHTML = 'Error: No se ha ingresado ningún comando';
         return;
     }
 
     error.innerHTML = '';
-    const interpreter = new Interpreter();
-    const interpreterObj = interpreter.parseString(codeInput.value);
+    const parser = new Parser();
+    const parserObj = parser.parseString(codeInput.value);
 
-    if (interpreterObj.result.status === 'Error') {
-        error.innerHTML = `${interpreterObj.result.status}: ${interpreterObj.result.desc}`;
+    if (parserObj.result.status === 'Error') {
+        error.innerHTML = `${parserObj.result.status}: ${parserObj.result.desc}`;
     } else {
-        robot.setInstrunctions(interpreterObj.commands);
+        robot.setInstrunctions(parserObj.commands);
         enteredCommands.push(codeInput.value);
-        clearEditor();
+        commandIndex++;
+        codeInput.value = '';
     }
 }

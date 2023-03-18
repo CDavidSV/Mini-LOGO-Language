@@ -139,33 +139,6 @@ class Robot {
             }
         }
     }
-
-    // This function will be called when the screen is resized
-    reconstructPath() {
-        if (this.paths.length < 1) return;
-
-        // Clear canvas
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.fillStyle = mainCanvasColor;
-        ctx.fillRect(0, 0, canvasContainer.offsetWidth, canvasContainer.offsetHeight);
-        ctx.globalCompositeOperation = "lighter";
-
-        // Reset robot's position and angle
-        this.prevPosX = canvasContainer.offsetWidth / 2;
-        this.prevPosY = canvasContainer.offsetHeight / 2;
-        this.posX = canvasContainer.offsetWidth / 2;
-        this.posY = canvasContainer.offsetHeight / 2;
-        this.angle = 90;
-
-        // Redraw all paths
-        for(let path of this.paths) {
-            this.penColor = path.currentColor;
-            this.angle = path.angle;
-            this.penUp = path.penUp;
-
-            this.moveTo(path.length, false);
-        }
-    }
 }
 
 // Functions

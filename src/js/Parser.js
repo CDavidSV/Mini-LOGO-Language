@@ -1,4 +1,4 @@
-class Interpreter {
+class Parser {
     constructor() {
         this.inputString = "";
         this.tokens = [];
