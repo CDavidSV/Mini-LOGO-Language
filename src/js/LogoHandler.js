@@ -88,10 +88,6 @@ class Robot {
         this.robot.style.transform = `translate(-50%, -50%) rotate(${this.angle - 90}deg)`;
     }
 
-    repeat() {
-
-    }
-
     pickupPen() {
         this.penUp = true;
     }
@@ -156,6 +152,8 @@ function clearScreen() {
 function resizeCanvas() {
     canvas.width = canvasContainer.offsetWidth;
     canvas.height = canvasContainer.offsetHeight;
+
+    robot.changeColor('blanco');
     clearScreen();
     robot.center();
     robot.executeCommands();

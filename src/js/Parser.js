@@ -10,10 +10,7 @@ class Parser {
     }
 
     command() {
-        if (this.result.status === 'Error') {
-            this.commands = [];
-            return;
-        }
+        if (this.result.status === 'Error') return;
 
         if (this.token && this.token.match(/^(adelante|ade|atras|atr|derecha|der|izquierda|izq)$/)) {
             this.token = this.nextToken();
@@ -36,7 +33,9 @@ class Parser {
             this.loop();
             this.token = this.nextToken();
             this.command();
-        } else if (this.token && this.loops < 1) {
+        } else if (this.loops >= 1 && (this.token === '[' || this.token === ']')) {
+            this.result = {status: "Success", desc: "Todos los comandos se han analizado con éxito"}; 
+        } else if (this.token) {
             this.result = {status: "Error", desc: `Comando no reconocido (${this.token})`};
             return;
         } else {
@@ -48,7 +47,8 @@ class Parser {
         if (this.token && !this.token.match(/^(rojo|azul|verde|amarillo|naranja|morado|negro|blanco|gris|marron|rosa|turquesa|lavanda|granate|oliva|coral|beige)$/)) {
             this.result = {status: "Error", desc: `${this.token} no es un color valido`}; 
             return;
-        } else if (!this.token) {
+        }
+        if (!this.token) {
             this.result = {status: "Error", desc: `Este comando requiere un valor (${this.tokens[this.previousTokenIndex]})`};
             return;
         }
@@ -58,7 +58,8 @@ class Parser {
         if (this.token && !this.token.match(/^\d+$/)) {
             this.result = {status: "Error", desc: `${this.token} no es un valor valido para este comando (${this.tokens[this.previousTokenIndex]})`};
             return;
-        } else if (!this.token) {
+        }
+        if (!this.token) {
             this.result = {status: "Error", desc: `Este comando requiere un valor (${this.tokens[this.previousTokenIndex]})`};
             return;
         }
@@ -66,6 +67,7 @@ class Parser {
 
     loop() {
         this.number();
+        if (this.result.status === 'Error') return;
         
         this.generateCommand('loop', [], this.token);
         this.token = this.nextToken();
@@ -77,7 +79,10 @@ class Parser {
         const startIndex = this.commands.length;
         this.loops++;
         this.token = this.nextToken();
+        
         this.command();
+        if (this.result.status === 'Error') return;
+
         this.loops--;
         const endIndex = this.commands.length;
 
@@ -85,7 +90,7 @@ class Parser {
         this.commands[startIndex - 1].body = slicedCommands;
         this.commands.splice(startIndex, endIndex);
 
-        if (this.token && !this.token.match(/^\]$/)) {
+        if (!this.token || !this.token.match(/^\]$/)) {
             this.result = {status: "Error", desc: `Se esperaba el cierre de corchete para el comando "repetir"`};
             return;
         }
@@ -115,6 +120,7 @@ class Parser {
         this.token = this.tokens[this.tokenIndex];
         this.command();
 
+        if (this.result.status === 'Error') this.commands = [];
         return {result: this.result, commands: this.commands};
     }
 }
