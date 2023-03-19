@@ -45,7 +45,7 @@ class Parser {
 
     color() {
         if (this.token && !this.token.match(/^(rojo|azul|verde|amarillo|naranja|morado|negro|blanco|gris|marron|rosa|turquesa|lavanda|granate|oliva|coral|beige)$/)) {
-            this.result = {status: "Error", desc: `${this.token} no es un color valido`}; 
+            this.result = {status: "Error", desc: `"${this.token}" no es un color valido`}; 
             return;
         }
         if (!this.token) {
@@ -56,7 +56,7 @@ class Parser {
 
     number() {
         if (this.token && !this.token.match(/^\d+$/)) {
-            this.result = {status: "Error", desc: `${this.token} no es un valor valido para este comando (${this.tokens[this.previousTokenIndex]})`};
+            this.result = {status: "Error", desc: `"${this.token}" no es un valor valido para este comando (${this.tokens[this.previousTokenIndex]})`};
             return;
         }
         if (!this.token) {
