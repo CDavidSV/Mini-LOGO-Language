@@ -9,6 +9,7 @@ class Parser {
         this.loops = 0;
     }
 
+    // Recursively check all tokens for syntax or lexic errors.
     command() {
         if (this.result.status === 'Error') return;
 
@@ -33,7 +34,7 @@ class Parser {
             this.loop();
             this.token = this.nextToken();
             this.command();
-        } else if (this.loops >= 1 && (this.token === '[' || this.token === ']')) {
+        } else if (this.loops >= 1 && (this.token === '[' || this.token === ']')) { // In case we are inside a loop "[" & "]" are valid for delimitting commands used inside a loop.
             this.result = {status: "Success", desc: "Todos los comandos se han analizado con éxito"}; 
         } else if (this.token) {
             this.result = {status: "Error", desc: `Comando no reconocido (${this.token})`};
@@ -43,6 +44,7 @@ class Parser {
         }
     }
 
+    // Verify colors.
     color() {
         if (this.token && !this.token.match(/^(rojo|azul|verde|amarillo|naranja|morado|negro|blanco|gris|marron|rosa|turquesa|lavanda|granate|oliva|coral|beige)$/)) {
             this.result = {status: "Error", desc: `"${this.token}" no es un color valido`}; 
@@ -54,6 +56,7 @@ class Parser {
         }
     }
 
+    // Verify Numbers.
     number() {
         if (this.token && !this.token.match(/^\d+$/)) {
             this.result = {status: "Error", desc: `"${this.token}" no es un valor valido para este comando (${this.tokens[this.previousTokenIndex]})`};
@@ -65,6 +68,7 @@ class Parser {
         }
     }
 
+    // Handles loops
     loop() {
         this.number();
         if (this.result.status === 'Error') return;
@@ -86,7 +90,7 @@ class Parser {
         this.loops--;
         const endIndex = this.commands.length;
 
-        const slicedCommands = this.commands.slice(startIndex, endIndex);
+        const slicedCommands = this.commands.slice(startIndex, endIndex); // Verify where inside the commands array it will go. In case it is neested loop.
         this.commands[startIndex - 1].body = slicedCommands;
         this.commands.splice(startIndex, endIndex);
 
@@ -96,11 +100,13 @@ class Parser {
         }
     }
     
+    // Get next token.
     nextToken() {
         this.previousTokenIndex++;
         return this.tokens[++this.tokenIndex];
     }
 
+    // Add the commands to the commands array.
     generateCommand(type, body, value) {
         this.commands.push({type, body, value});
     }
@@ -113,12 +119,14 @@ class Parser {
         this.tokenIndex = 0;
 
         this.inputString = inputString;
+        
+        // Each "[" & "]" count as separate tokens.
         this.inputString = this.inputString.replace(/\[/g, ' [ ');
         this.inputString = this.inputString.replace(/\]/g, ' ] ');
-        this.tokens = this.inputString.toLowerCase().split(/\s+/);
+        this.tokens = this.inputString.toLowerCase().split(/\s+/); // Separate the commands by spaces.
         
         this.token = this.tokens[this.tokenIndex];
-        this.command();
+        this.command(); // Call main function with first token.
 
         if (this.result.status === 'Error') this.commands = [];
         return {result: this.result, commands: this.commands};

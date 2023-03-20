@@ -42,6 +42,7 @@ class Robot {
         this.penUp = true;
         this.robot = robotElement;
 
+        // Commands to be called for the robot to perform actions.
         this.commands = {
             "adelante": (distancia) => this.moveTo(distancia),
             "ade": (distancia) => this.moveTo(distancia),
@@ -64,8 +65,8 @@ class Robot {
 
     moveTo(units) {
         const radians = this.angle * (Math.PI / 180);
-        const newX = this.posX - units * Math.cos(radians); // Calculate new x position
-        const newY = this.posY - units * Math.sin(radians); // Calculate new y position
+        const newX = this.posX - units * Math.cos(radians); // Calculate new x position.
+        const newY = this.posY - units * Math.sin(radians); // Calculate new y position.
 
         this.prevPosX = this.posX;
         this.prevPosY = this.posY;
@@ -75,11 +76,12 @@ class Robot {
         this.robot.style.left =`${this.posX}px`;
         this.robot.style.top =`${this.posY}px`;
 
-        if (this.penUp) {
-            this.drawLine();
+        if (this.penUp) { // Check if the pen is held to draw.
+            this.drawLine(); // Draw the line.
         }
     }
 
+    // Adds the angle to the current angle the robot is facing.
     addAngle(angle) {
         const addedAngles = this.angle + parseInt(angle);
         const k = Math.floor((addedAngles) / 360);
@@ -101,6 +103,7 @@ class Robot {
         this.penColor = this.penColors[color];
     }
 
+    // Centers the robot and resets the angle.
     center() {
         this.posX = (canvasContainer.offsetWidth / 2);
         this.posY = (canvasContainer.offsetHeight / 2);
@@ -119,11 +122,13 @@ class Robot {
         ctx.stroke();
     }
 
+    // Sets new instuctions given by a Paser.
     setInstrunctions(newInstructions) {
         newInstructions.forEach(i => this.instructions.push(i));
         this.executeCommands(newInstructions);
     }
 
+    // Recursively call all functions based on the instructions given by the Parser.
     executeCommands(instructions=this.instructions) {
         for (let instruction of instructions) {
             if (instruction.type === "command") {
@@ -153,6 +158,7 @@ function resizeCanvas() {
     canvas.width = canvasContainer.offsetWidth;
     canvas.height = canvasContainer.offsetHeight;
 
+    // We clear the canvas and redraw the paths so that they always appear centered.
     robot.changeColor('blanco');
     clearScreen();
     robot.center();

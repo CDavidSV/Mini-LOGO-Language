@@ -40,7 +40,7 @@ function handleyKeyInputs(e) {
             run.click();
             break;
         case 38:
-            if (enteredCommands.length < 1) return;                
+            if (enteredCommands.length < 1) return; // Get previously used commands          
             if (commandIndex !== 0) commandIndex--;
             codeInput.value = enteredCommands[commandIndex];
             break;
@@ -52,6 +52,7 @@ function handleyKeyInputs(e) {
     }
 }
 
+// Opens or closes the menu.
 function handleMenu() {
     if (!menuOpen) {
         menu.classList.add('active');
@@ -67,12 +68,14 @@ function clearEditor() {
     codeInput.focus();
 }
 
+// Sets a preview command in the editor.
 function tryCommand(event) {
     codeInput.value = commands[event.target.closest('.command').id];
   
     handleMenu();
 }
 
+// Runs the parser and calls to execute commands if no error occurs.
 function runParser() {
     commandIndex = enteredCommands.length;
     if (codeInput.value.length < 1) {
