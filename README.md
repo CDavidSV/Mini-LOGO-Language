@@ -54,5 +54,5 @@ Command: `repetir 99 [color rojo ade 200 der 85604 color verde ade 240 izq 32667
 ---
 
 ## Getting Started
-To use this Logo Language, simply open the **index.html** inside the src directory in your web browser. The Logo Language interface will appear on your screen, and you can begin entering commands to control the turtle.
+To use this Logo Language, simply open the **index.html** on a live-server. The Logo Language interface will appear on your screen, and you can begin entering commands to control the turtle.
 
