@@ -2,7 +2,7 @@
 
 This is a collaborative project to develop a simple LOGO programming language designed to help students learn the basic concepts of programming logic. A set of commands can be entered to move a robot across the screen and create drawings. The commands are written in Spanish to make it easy to understand for Spanish-speaking students that don't know English yet.
 
-Check it out here: https://www.logo.cdavidsv.dev/
+Check it out here: [LOGO](https://www.logo.cdavidsv.dev/)
 
 ## Available Commands
 - **adelante**: Moves the robot forward.
